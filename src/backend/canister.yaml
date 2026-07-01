@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://github.com/dfinity/icp-cli/raw/refs/heads/main/docs/schemas/canister-yaml-schema.json
+name: backend
+build:
+  steps:
+    - type: script
+      commands:
+        - mops build
+        - mv dist/backend/backend.wasm "$ICP_WASM_OUTPUT_PATH"

@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/PlusJakartaSans.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    /* GlobeFlow dark space theme */
+    --background: 0.08 0.012 250;
+    --foreground: 0.92 0.01 240;
+    --card: 0.13 0.018 250;
+    --card-foreground: 0.92 0.01 240;
+    --popover: 0.16 0.022 250;
+    --popover-foreground: 0.92 0.01 240;
+    --primary: 0.55 0.18 240;
+    --primary-foreground: 0.98 0 0;
+    --secondary: 0.18 0.025 250;
+    --secondary-foreground: 0.85 0.01 240;
+    --muted: 0.16 0.02 250;
+    --muted-foreground: 0.58 0.02 240;
+    --accent: 0.22 0.03 250;
+    --accent-foreground: 0.92 0.01 240;
+    --destructive: 0.58 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.25 0.025 250;
+    --input: 0.22 0.025 250;
+    --ring: 0.55 0.18 240;
+    --chart-1: 0.62 0.19 160;
+    --chart-2: 0.58 0.2 200;
+    --chart-3: 0.65 0.22 280;
+    --chart-4: 0.7 0.19 70;
+    --chart-5: 0.68 0.21 30;
+    /* Heat-risk feature tokens — perceptually ordered severity scale */
+    --risk-low: 0.72 0.17 150;
+    --risk-low-foreground: 0.14 0.03 150;
+    --risk-medium: 0.82 0.16 90;
+    --risk-medium-foreground: 0.16 0.03 90;
+    --risk-high: 0.7 0.17 55;
+    --risk-high-foreground: 0.14 0.03 55;
+    --risk-critical: 0.52 0.21 27;
+    --risk-critical-foreground: 0.98 0.01 60;
+    /* Heatmap gradient stops (low→critical, used by texture generator + legend) */
+    --heat-stop-0: 0.72 0.17 150;
+    --heat-stop-1: 0.82 0.16 90;
+    --heat-stop-2: 0.7 0.17 55;
+    --heat-stop-3: 0.52 0.21 27;
+    --heat-glow: 0.52 0.21 27;
+    --sidebar: 0.13 0.018 250;
+    --sidebar-foreground: 0.92 0.01 240;
+    --sidebar-primary: 0.55 0.18 240;
+    --sidebar-primary-foreground: 0.98 0 0;
+    --sidebar-accent: 0.22 0.03 250;
+    --sidebar-accent-foreground: 0.92 0.01 240;
+    --sidebar-border: 0.25 0.025 250;
+    --sidebar-ring: 0.55 0.18 240;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  }
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(20, 25, 34, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(43, 52, 67, 0.8);
+  border-radius: 10px;
+}
+
+/* Slide in from right */
+.slide-in-right {
+  transform: translateX(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  opacity: 1;
+}
+
+.slide-out-right {
+  transform: translateX(110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Star field canvas */
+.star-bg {
+  background: radial-gradient(
+    ellipse at center,
+    #0d1220 0%,
+    #070a10 70%,
+    #050709 100%
+  );
+}
+
+/* Layer chip colors */
+.chip-terrain {
+  background: #38b56a;
+}
+.chip-elevation {
+  background: #35c3b2;
+}
+.chip-rainfall {
+  background: #3a87ff;
+}
+.chip-population {
+  background: #ff5c7a;
+}
+.chip-temperature {
+  background: #ff8a3d;
+}
+.chip-pollution {
+  background: #8b6cff;
+}
+.chip-gdp {
+  background: #f2c94c;
+}
+.chip-lights {
+  background: #7b61ff;
+}
+.chip-heat-risk {
+  background: oklch(0.52 0.21 27);
+}
+.chip-bangkok-density {
+  background: #ff5c7a;
+}
+
+/* Heat-risk level surfaces (token-driven, AA on dark) */
+.risk-low {
+  background: oklch(var(--risk-low));
+  color: oklch(var(--risk-low-foreground));
+}
+.risk-medium {
+  background: oklch(var(--risk-medium));
+  color: oklch(var(--risk-medium-foreground));
+}
+.risk-high {
+  background: oklch(var(--risk-high));
+  color: oklch(var(--risk-high-foreground));
+}
+.risk-critical {
+  background: oklch(var(--risk-critical));
+  color: oklch(var(--risk-critical-foreground));
+}
+
+/* Heatmap legend gradient — low→critical */
+.heat-gradient {
+  background: linear-gradient(
+    90deg,
+    oklch(var(--heat-stop-0)) 0%,
+    oklch(var(--heat-stop-1)) 33%,
+    oklch(var(--heat-stop-2)) 66%,
+    oklch(var(--heat-stop-3)) 100%
+  );
+}
+
+/* Critical zone pulse on globe overlay */
+.heat-pulse {
+  box-shadow: 0 0 0 0 oklch(var(--heat-glow) / 0.55);
+  animation: heat-pulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(43, 52, 67, 0.8);
+  border-radius: 2px;
+}

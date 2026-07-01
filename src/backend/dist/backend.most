@@ -1,0 +1,115 @@
+// Version: 3.0.0
+type Data__80296667<K, V> =
+  {var count : Nat__1040412405; kvs : [var ?(K, V)]};
+type HeatRiskAreaId__243569974 = HeatRiskAreaId__920441702;
+type HeatRiskAreaId__920441702 = Nat;
+type HeatRiskArea__386769920 =
+  {
+    apparentTemp : Float;
+    baseTemp : Float;
+    buildingFactor : Float;
+    communityDensityFactor : Float;
+    createdAt : Time__688418391;
+    id : HeatRiskAreaId__920441702;
+    latitude : Float;
+    longitude : Float;
+    radiusMeters : Float;
+    recommendedGreenArea : Float;
+    recommendedShelters : Nat;
+    riskLevel : Text;
+    riskScore : Nat;
+    title : Text;
+    vegetationFactor : Float
+  };
+type HeatRiskArea__739420006 = HeatRiskArea__386769920;
+type Int__616954475 = Int;
+type Int__837511138 = Int__616954475;
+type Internal__41346355<K, V> =
+  {children : [var ?Node__1000929467<K, V>]; data : Data__80296667<K, V>};
+type Leaf__712614010<K, V> = {data : Data__80296667<K, V>};
+type Map__222667396<K, V> = Map__912772452<K, V>;
+type Map__709709801<K, V> =
+  {var root : Node__1000929467<K, V>; var size : Nat__1040412405};
+type Map__912772452<K, V> = Map__709709801<K, V>;
+type Nat__1040412405 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__1000929467<K, V> =
+  {#internal : Internal__41346355<K, V>; #leaf : Leaf__712614010<K, V>};
+type OldAccessControlState__841599830 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__222667396<Principal, OldUserRole__889293160>
+  };
+type OldHeatRiskAreaId__340524175 = Nat;
+type OldHeatRiskArea__619243649 =
+  {
+    apparentTemp : Float;
+    baseTemp : Float;
+    buildingFactor : Float;
+    communityDensityFactor : Float;
+    createdAt : Time__688418391;
+    id : OldHeatRiskAreaId__340524175;
+    latitude : Float;
+    longitude : Float;
+    radiusMeters : Float;
+    recommendedGreenArea : Float;
+    recommendedShelters : Nat;
+    riskLevel : Text;
+    riskScore : Nat;
+    title : Text;
+    vegetationFactor : Float
+  };
+type OldIdCounter__27714074 = {var next : Nat};
+type OldPinId__834466331 = Nat;
+type OldPin__199601772 =
+  {
+    createdAt : Time__688418391;
+    description : Text;
+    id : OldPinId__834466331;
+    latitude : Float;
+    longitude : Float;
+    title : Text
+  };
+type OldUserRole__889293160 = {#admin; #guest; #user};
+type PinId__505910771 = PinId__847372723;
+type PinId__847372723 = Nat;
+type Pin__1006269294 =
+  {
+    createdAt : Time__688418391;
+    description : Text;
+    id : PinId__847372723;
+    latitude : Float;
+    longitude : Float;
+    title : Text
+  };
+type Pin__142824158 = Pin__1006269294;
+type Time__298180599 = Int__837511138;
+type Time__688418391 = Time__298180599;
+type UserRole__686137147 = {#admin; #guest; #user};
+actor ({
+  in accessControlState : OldAccessControlState__841599830;
+  in var heatRiskAreas :
+    Map__222667396<OldHeatRiskAreaId__340524175, OldHeatRiskArea__619243649>;
+  in var heatRiskIdCounter : OldIdCounter__27714074;
+  in var idCounter : OldIdCounter__27714074;
+  in var pins : Map__222667396<OldPinId__834466331, OldPin__199601772>
+}, {
+  stable var accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__222667396<Principal, UserRole__686137147>
+    };
+  stable var heatRiskAreas :
+    {
+      var root :
+        Node__1000929467<HeatRiskAreaId__243569974, HeatRiskArea__739420006>;
+      var size : Nat__1040412405
+    };
+  stable var heatRiskIdCounter : {var next : Nat};
+  stable var idCounter : {var next : Nat};
+  stable var pins :
+    {
+      var root : Node__1000929467<PinId__505910771, Pin__142824158>;
+      var size : Nat__1040412405
+    }
+});

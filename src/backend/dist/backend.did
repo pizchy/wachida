@@ -1,0 +1,187 @@
+type WildfireResponse = record {fires: vec WildfirePoint;};
+type WildfirePoint = 
+ record {
+   acqDate: text;
+   brightness: float64;
+   confidence: nat;
+   lat: float64;
+   lng: float64;
+   satellite: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: HttpRequestResult;
+ };
+type Time = int;
+type Result = 
+ variant {
+   err: Error;
+   ok;
+ };
+type PinInput = 
+ record {
+   description: text;
+   latitude: float64;
+   longitude: float64;
+   title: text;
+ };
+type PinId = nat;
+type Pin = 
+ record {
+   createdAt: Time;
+   description: text;
+   id: PinId;
+   latitude: float64;
+   longitude: float64;
+   title: text;
+ };
+type HttpRequestResult = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type HttpHeader = 
+ record {
+   name: text;
+   value: text;
+ };
+type HeatRiskAreaInput = 
+ record {
+   communityDensityFactor: opt float64;
+   latitude: float64;
+   longitude: float64;
+   radiusMeters: float64;
+   title: text;
+ };
+type HeatRiskAreaId = nat;
+type HeatRiskArea = 
+ record {
+   apparentTemp: float64;
+   baseTemp: float64;
+   buildingFactor: float64;
+   communityDensityFactor: float64;
+   createdAt: Time;
+   id: HeatRiskAreaId;
+   latitude: float64;
+   longitude: float64;
+   radiusMeters: float64;
+   recommendedGreenArea: float64;
+   recommendedShelters: nat;
+   riskLevel: text;
+   riskScore: nat;
+   title: text;
+   vegetationFactor: float64;
+ };
+type GovDataResponse = 
+ record {
+   error: text;
+   fetchedAt: int;
+   points: vec GovDataPoint;
+   source: text;
+   success: bool;
+ };
+type GovDataPoint = 
+ record {
+   lat: float64;
+   lng: float64;
+   name: text;
+   source: text;
+   value: float64;
+ };
+type GeocodeResult = 
+ record {
+   rawJson: text;
+   results: vec GeocodePlace;
+ };
+type GeocodePlace = 
+ record {
+   country: text;
+   lat: float64;
+   lng: float64;
+   name: text;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type BBox = 
+ record {
+   maxLat: float64;
+   maxLng: float64;
+   minLat: float64;
+   minLng: float64;
+ };
+service : {
+  __accessControlState: () -> (reserved) query;
+  __heatRiskAreas: (ko: opt HeatRiskAreaId, count: opt nat) ->
+   (vec record {
+          HeatRiskAreaId;
+          HeatRiskArea;
+        }) query;
+  __heatRiskIdCounter: () -> (reserved) query;
+  __idCounter: () -> (reserved) query;
+  __pins: (ko: opt PinId, count: opt nat) -> (vec record {
+                                                    PinId;
+                                                    Pin;
+                                                  }) query;
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result);
+  _internet_identity_sign_in_start: () -> (blob);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  createHeatRiskArea: (input: HeatRiskAreaInput, riskScore: nat,
+   apparentTemp: float64, vegetationFactor: float64, buildingFactor: 
+   float64, baseTemp: float64, riskLevel: text, recommendedShelters: 
+   nat, recommendedGreenArea: float64, communityDensityFactor:
+   opt float64) -> (HeatRiskAreaId);
+  createPin: (input: PinInput) -> (PinId);
+  deleteHeatRiskArea: (id: HeatRiskAreaId) -> ();
+  deletePin: (id: PinId) -> ();
+  fetchGovData: (q: text) -> (GovDataResponse);
+  fetchWildfireData: (bbox: BBox) -> (WildfireResponse);
+  geocodeSearch: (q: text) -> (GeocodeResult);
+  getCallerUserRole: () -> (UserRole) query;
+  isCallerAdmin: () -> (bool) query;
+  listHeatRiskAreas: () -> (vec HeatRiskArea) query;
+  listPins: () -> (vec Pin) query;
+  readHeatRiskArea: (id: HeatRiskAreaId) -> (opt HeatRiskArea) query;
+  readPin: (id: PinId) -> (Pin) query;
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateHeatRiskArea: (id: HeatRiskAreaId, input: HeatRiskAreaInput,
+   riskScore: nat, apparentTemp: float64, vegetationFactor: float64,
+   buildingFactor: float64, baseTemp: float64, riskLevel: text,
+   recommendedShelters: nat, recommendedGreenArea: float64,
+   communityDensityFactor: opt float64) -> ();
+  updatePin: (id: PinId, input: PinInput) -> ();
+}
